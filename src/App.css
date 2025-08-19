@@ -1,0 +1,116 @@
+/* Add these styles for proper layout with fixed bottom navigation */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-area {
+  flex: 1;
+  padding-bottom: 100px; /* Increased space for bottom navigation */
+}
+
+.fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  background-color: #fff;
+  border-top: 1px solid #dee2e6;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Custom sticky-bottom class for iOS keyboard handling */
+.sticky-bottom {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  background-color: #fff;
+  border-top: 1px solid #dee2e6;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pb-safe-area {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Additional mobile-friendly styles */
+@media (max-width: 768px) {
+  .content-area {
+    padding-bottom: 120px; /* Extra space on mobile devices */
+  }
+  
+  /* Ensure content doesn't get cut off */
+  .min-vh-100 {
+    min-height: calc(100vh - 120px) !important;
+  }
+}
+
+/* iOS WebView specific adjustments */
+@supports (-webkit-touch-callout: none) {
+  .content-area {
+    padding-bottom: 130px; /* Extra space for iOS safe areas */
+  }
+  
+  .fixed-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* iOS Keyboard handling - prevent viewport issues */
+@supports (-webkit-touch-callout: none) {
+  /* Prevent iOS from changing viewport when keyboard appears */
+  html {
+    /* Key fix: prevent viewport changes during keyboard */
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  body {
+    /* Prevent iOS from changing viewport when keyboard appears */
+    -webkit-text-size-adjust: 100%;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Prevent viewport resizing */
+    position: relative;
+  }
+  
+  /* Better handling for fixed elements during keyboard */
+  .fixed-bottom {
+    /* Use transform instead of bottom positioning for better iOS support */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    /* Ensure it stays at bottom even during keyboard */
+    bottom: 0 !important;
+    position: fixed !important;
+    /* Prevent keyboard interference */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  
+  /* Container to handle scrolling properly */
+  .app-container {
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Keyboard open state */
+  .keyboard-open {
+    /* Force the navigation to stay at bottom during keyboard */
+    bottom: 0 !important;
+    position: fixed !important;
+    /* Prevent any viewport interference */
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    /* Ensure it's above keyboard */
+    z-index: 9999 !important;
+  }
+}
